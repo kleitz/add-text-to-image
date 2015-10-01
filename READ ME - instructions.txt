@@ -1,0 +1,23 @@
+Here are the instructions and files attached:
+
+1. Module interface for user when they start building their product preview:
+http://screencast.com/t/lusfdogC9
+File name: previewmodule.jpg
+
+2. When user clicks “Create New Layout” They get an option:
+Please select your product picture.  Here user can select product picture.
+
+3. I put a folder “test product images” which you can test on
+
+4. User can Save. User can also click “Generate Code” If user clicks “Generate code” then layout should safe by default.
+
+5. System generates code with the following fields
+Enter text here • Choose font • Preview button
+http://screencast.com/t/PtKifYJwC
+
+6. When use fills out field and selects font they click preview button.  When preview button is clicked then fancy box example appears 
+http://fancyapps.com/fancybox/demo/
+
+7. User can close lightbox appearing.  
+
+This should also work on mobile.
