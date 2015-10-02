@@ -6,6 +6,7 @@ function startUpload(){
 	$('#select_picture').html('Processing...');
 }
 
+
 function stopUpload(success){
 	if(success!=0 && success!="0"){
 		$('#select_picture').html('Please select your product picture');		
@@ -50,14 +51,17 @@ function stopUpload(success){
 // 	$("#coordw").val(c.w);
 //     $("#coordh").val(c.h);
 // };
-
 jQuery(document).ready(function($) {
+	$('#color').colorpicker();
+	$('#edit_color').colorpicker();
+
 	var interval = null;
 	function createJcropArea(){
 		jcrop_api  = $.Jcrop("#image_preview",{
 			allowMove: 	true,
 	        allowResize: false,
 			onSelect: function(c){
+				console.log(c);
 				$("#coordx1").val(c.x);
 			    $("#coordy1").val(c.y);
 				$("#coordx2").val(c.x2);
@@ -94,6 +98,9 @@ jQuery(document).ready(function($) {
 					type: "edit layout",
 					datetime: $( "#change_layout option:selected" ).val(),
 					layout_name: $( "#edit_layout_name" ).val(),
+					color: $( "#edit_color" ).val(),
+					d: $( "#edit_direction option:selected" ).val(),
+					r: $( "#edit_radius" ).val(),
 					l: $( "#edit_characters_length" ).val(),
 					x1:$("#coordx1").val(),
 					y1:$("#coordy1").val(),
@@ -137,6 +144,11 @@ jQuery(document).ready(function($) {
 					type: "save layout",
 					image_name : $.cookie("latest_image_name"),
 					layout_name: $("#layout_name").val(),
+					
+					color: $( "#color" ).val(),
+					d: $( "#direction option:selected" ).val(),
+					r: $( "#radius" ).val(),
+
 					l: $("#characters_length").val(),
 					x1:$("#coordx1").val(),
 					y1:$("#coordy1").val(),
@@ -212,7 +224,6 @@ jQuery(document).ready(function($) {
      //           		path:'../js/ZeroClipboard.swf',
      //           		copy:$('pre.htmlCode').text()
      //       		});
-
  		});
 
 		// toastr.success('generate_code');
@@ -235,10 +246,18 @@ jQuery(document).ready(function($) {
 	$("#edit_this_layout").click(function(event) {
 		if(iseditmode){
 			$("#row_edit_layout_name").hide();
+			$("#row_edit_color").hide();
+			$("#row_edit_direction").hide();
+			$("#row_edit_character").hide();
+			$("#row_edit_radius").hide();
 			$("#edit_characters_length").prop('disabled', true);	
 			iseditmode = false;
 		}else{
 			$("#row_edit_layout_name").show();
+			$("#row_edit_color").show();
+			$("#row_edit_direction").show();
+			$("#row_edit_character").show();
+			$("#row_edit_radius").show();
 			$("#edit_layout_name").focus().val($( "#change_layout option:selected" ).text());
 			$("#edit_characters_length").prop('disabled', false);
 			iseditmode = true;

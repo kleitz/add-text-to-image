@@ -27,13 +27,24 @@ if(is_ajax() || isset($_POST['type'])){
 			$new_layout->set_w($_POST['w']);
 			$new_layout->set_h($_POST['h']);
 			$new_layout->set_l($_POST['l']);
+			$new_layout->set_color($_POST['color']);
+			$new_layout->set_r($_POST['r']);
+			$new_layout->set_d($_POST['d']);
 			
 			$currentListLayout = $dbHandler->read('layout');	
-			$tmparr = (array) $currentListLayout;
+			
+			if(is_array($currentListLayout)){
+				$tmparr = $currentListLayout;
+			} else {
+				$tmparr = get_object_vars($currentListLayout);
+			}
+
+			// $tmparr[]= (object) $new_layout->getAllData();
 			array_push($tmparr, (object) $new_layout->getAllData()); 
 			$currentListLayout = $tmparr;
 
 			$rs = $dbHandler->set("layout", $currentListLayout)->save();
+
 			if($rs){
 				$tmpdata = ($new_layout->getAllData());
 				$dbHandler->set("current_layout", $tmpdata)->save();
@@ -72,6 +83,9 @@ if(is_ajax() || isset($_POST['type'])){
 					$currentlayoutObj->set_w($tmp['w']);
 					$currentlayoutObj->set_h($tmp['h']);
 					$currentlayoutObj->set_l($tmp['l']);
+					$currentlayoutObj->set_color($tmp['color']);
+					$currentlayoutObj->set_d($tmp['d']);
+					$currentlayoutObj->set_r($tmp['r']);
 
 					$tmpdata = $currentlayoutObj->getAllData();
 					$dbHandler->set("current_layout", ($tmpdata))->save();
@@ -107,6 +121,11 @@ if(is_ajax() || isset($_POST['type'])){
 					$currentlayoutObj->set_w($_POST['w']);
 					$currentlayoutObj->set_h($_POST['h']);
 					$currentlayoutObj->set_l($_POST['l']);
+					$currentlayoutObj->set_color($_POST['color']);
+					$currentlayoutObj->set_r($_POST['r']);
+					$currentlayoutObj->set_d($_POST['d']);
+
+
 					$tmpdata = $currentlayoutObj->getAllData();
 					// var_dump($tmpdata); exit;
 					$dbHandler->set("current_layout", ($tmpdata))->save();
@@ -119,6 +138,9 @@ if(is_ajax() || isset($_POST['type'])){
 					$tmpvalue->w = $_POST['w'];
 					$tmpvalue->h = $_POST['h'];
 					$tmpvalue->l = $_POST['l'];
+					$tmpvalue->color = $_POST['color'];
+					$tmpvalue->r = $_POST['r'];
+					$tmpvalue->d = $_POST['d'];
 					$tmpvalue->name = $_POST['layout_name'];
 					$alllayoutJson[$key] = $tmpvalue;
 				}
@@ -158,6 +180,10 @@ if(is_ajax() || isset($_POST['type'])){
 					$currentlayoutObj->set_w($tmp['w']);
 					$currentlayoutObj->set_h($tmp['h']);
 					$currentlayoutObj->set_l($tmp['l']);
+					$currentlayoutObj->set_color($tmp['color']);
+					$currentlayoutObj->set_d($tmp['d']);
+					$currentlayoutObj->set_r($tmp['r']);
+
 					$tmpdata = $currentlayoutObj->getAllData();
 					$dbHandler->set("current_layout", ($tmpdata))->save();
 					break;
@@ -172,10 +198,43 @@ if(is_ajax() || isset($_POST['type'])){
 		
 		case 'generate code':
 			$datetime = $_POST['datetime'];
-			$codecontent = file_get_contents('code_generate.tpl');
+			$image = "";
+			$x = "";
+			$y = "";
+			$w = "";
+			$h = "";
+			$color = "";
+			$r = "";
+			$d = "";
 
+			$alllayoutJson = $dbHandler->read('layout');
+			foreach ($alllayoutJson as $key => $value) {
+				if($value->datetime == $datetime){
+					$image = $config['base_url'].'img/'.$value->background_image;
+					$x  = $value->x1;
+					$y  = $value->y1;
+					$w  = $value->w;
+					$h  = $value->h;
+					$color  = $value->color;
+					$r  = $value->r;
+					$d  = $value->d;
+					break;
+				}
+			}
+
+			$fontcontent = file_get_contents('code_font.tpl');
+			$fontcontent = str_replace('{{base_url}}', $config['base_url'] , $fontcontent);
+
+			$codecontent = file_get_contents('code_generate.tpl');
 			$codecontent = str_replace('{{base_url}}', $config['base_url'] , $codecontent);
+			$codecontent = str_replace('{{font_content}}', $fontcontent , $codecontent);
 			$codecontent = str_replace('{{datetimeid}}', $datetime , $codecontent);
+			$codecontent = str_replace('{{image}}', $image , $codecontent);
+			$codecontent = str_replace('{{x}}', $y , $codecontent);
+			$codecontent = str_replace('{{y}}', $x , $codecontent);
+			$codecontent = str_replace('{{w}}', $w , $codecontent);
+			$codecontent = str_replace('{{h}}', $h , $codecontent);
+			$codecontent = str_replace('{{color}}', $color , $codecontent);
 
 			$list_font = $config['list_font'];
 			$font_option = '';
@@ -186,21 +245,6 @@ if(is_ajax() || isset($_POST['type'])){
 			
 			echo htmlspecialchars($codecontent);
 
-			// foreach ($alllayoutJson as $key => $value) {
-			// 	if($value->datetime == $datetime){
-			// 		$tmp = (array) $value;
-			// 		$currentlayoutObj->set_name($tmp['name']);
-			// 		$currentlayoutObj->set_background_image($tmp['background_image']);
-			// 		$currentlayoutObj->set_datetime($tmp['datetime']);
-			// 		$currentlayoutObj->set_x1($tmp['x1']);
-			// 		$currentlayoutObj->set_y1($tmp['y1']);
-			// 		$currentlayoutObj->set_x2($tmp['x2']);
-			// 		$currentlayoutObj->set_y2($tmp['y2']);
-			// 		$currentlayoutObj->set_w($tmp['w']);
-			// 		$currentlayoutObj->set_h($tmp['h']);
-			// 	}
-			// }
-			// echo json_encode(array('err'=>0));
 			break;
 
 		default:
@@ -225,6 +269,9 @@ if(is_ajax() || isset($_POST['type'])){
 		$currentlayoutObj->set_w($tmp['w']);
 		$currentlayoutObj->set_h($tmp['h']);
 		$currentlayoutObj->set_l($tmp['l']);
+		$currentlayoutObj->set_color($tmp['color']);
+		$currentlayoutObj->set_r($tmp['r']);
+		$currentlayoutObj->set_d($tmp['d']);
 	}
 }
 
@@ -239,6 +286,8 @@ if(is_ajax() || isset($_POST['type'])){
 <link rel="stylesheet" href="../css/jquery.Jcrop.min.css"/>
 <link rel="stylesheet" href="../css/toastr.css"/>
 <link rel="stylesheet" href="../css/jquery.snippet.min.css"/>
+<!-- <link rel="stylesheet" href="../css/docs.css"/> -->
+<link rel="stylesheet" href="../css/bootstrap-colorpicker.min.css"/>
 
 <script type="text/javascript">
 	var base_url = '<?php echo $config["base_url"]; ?>';
@@ -273,6 +322,32 @@ if(is_ajax() || isset($_POST['type'])){
 				<div class="col-md-3 new_layout" style="display:none;">
 					<div class="form-group">
 						(3)<input type="number" name="number" id="characters_length" placeholder="Characters length">			
+					</div>
+				</div>
+
+			</div>
+
+			<div class="row">	
+				<div class="col-md-2 col-md-offset-1 form-group">
+				</div>			
+				<div class="col-md-3 new_layout" style="display:none;">
+					<div class="form-group">
+						(4)<input type="text" name="color" id="color" placeholder="Please input color" value="#FFFFFF">			
+					</div>
+				</div>
+
+				<div class="col-md-3 new_layout" style="display:none;">
+					<div class="form-group">
+						(5) Direction <select class="" id="direction" name="d">
+								<option value="1" selected>1</option>							
+								<option value="-1">-1</option>							
+							</select>
+					</div>
+				</div>
+
+				<div class="col-md-3 new_layout" style="display:none;">
+					<div class="form-group">
+						(6)<input type="number" name="r" id="radius" placeholder="radius">			
 					</div>
 				</div>
 
@@ -313,15 +388,47 @@ if(is_ajax() || isset($_POST['type'])){
 
 			<div class="row" style="display:none" id="row_edit_layout_name">
 				<div class="preview_section col-md-12 col-md-offset-1 form-group">
-					<label>Layout name</label>
-					<input type="text" name="number" id="edit_layout_name" autocomplete="off">			
+					<div class="col-md-2"><label>Layout name</label></div>
+					<div class="col-md-4"><input type="text" name="number" id="edit_layout_name" autocomplete="off"></div>
 				</div>
 			</div>
 
-			<div class="row">
+			<div class="row" style="display:none" id="row_edit_color">
+				<div class="preview_section col-md-12 col-md-offset-1 form-group">
+					<div class="col-md-2"><label>Color</label></div>
+					<div class="col-md-4"><input type="text" name="color" value="<?php echo $currentlayoutObj->color; ?>" id="edit_color"></div>
+				</div>
+			</div>
+
+
+			<div class="row" style="display:none" id="row_edit_character">
 				<div class="col-md-12 col-md-offset-1 form-group">
-					<label>Character length</label>
-					<input type="number" name="number" id="edit_characters_length" value="<?php echo $currentlayoutObj->l; ?>" placeholder="Characters length" disabled>			
+					<div class="col-md-2"><label>Character length</label></div>
+					<div class="col-md-4"><input type="number" name="number" id="edit_characters_length" value="<?php echo $currentlayoutObj->l; ?>" placeholder="Characters length" disabled></div>
+				</div>
+			</div>
+
+			<div class="row" style="display:none" id="row_edit_direction">
+				<div class="preview_section col-md-12 col-md-offset-1 form-group">
+					<div class="col-md-2"><label>Direction</label></div>
+					<div class="col-md-4">
+						<select class="" id="edit_direction" name="d">
+							<?php 
+							if($currentlayoutObj->d == "1" || $currentlayoutObj->d == 1){
+								?><option value="1" selected>1</option><option value="-1">-1</option><?php
+							}else{
+								?><option value="1">1</option><option value="-1" selected="">-1</option><?php 
+							}
+							?>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="row" style="display:none" id="row_edit_radius">
+				<div class="col-md-12 col-md-offset-1 form-group" >
+					<div class="col-md-2"><label>Radius</label></div>
+					<div class="col-md-4"><input type="text" name="radius" id="edit_radius" value="<?php echo $currentlayoutObj->r; ?>"></div>
 				</div>
 			</div>
 
@@ -381,6 +488,11 @@ if(is_ajax() || isset($_POST['type'])){
 <script src="../js/bootbox.min.js"></script>
 
 <script src="../js/jquery.snippet.min.js"></script>
+
+<script src="../js/colorpicker-color.js"></script>
+<script src="../js/colorpicker.js"></script>
+<script src="../js/docs.js"></script>
+
 <script src="../js/script.js"></script>
 </body>
 

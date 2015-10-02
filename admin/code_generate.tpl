@@ -1,7 +1,9 @@
-<link rel="stylesheet" href="{{base_url}}/css/fancybox/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
-<link rel="stylesheet" href="{{base_url}}/css/fancybox/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
-<link rel="stylesheet" href="{{base_url}}/css/fancybox/jquery.fancybox-buttons.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="{{base_url}}/css/fancybox/jquery.fancybox-thumbs.css" type="text/css" media="screen" />
+{{font_content}}
+<link rel="stylesheet" href="{{base_url}}css/fancybox/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{base_url}}css/fancybox/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{base_url}}css/fancybox/jquery.fancybox-buttons.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{base_url}}css/fancybox/jquery.fancybox-thumbs.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{{base_url}}css/style.css" type="text/css" media="screen" />
 
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="{{base_url}}/js/fancybox/jquery.fancybox.js"></script>
@@ -9,18 +11,46 @@
 <script type="text/javascript" src="{{base_url}}/js/fancybox/jquery.fancybox-buttons.js"></script>
 <script type="text/javascript" src="{{base_url}}/js/fancybox/jquery.fancybox-thumbs.js?v=1.0.7"></script>
 <script type="text/javascript" src="{{base_url}}/js/fancybox/jquery.fancybox-media.js"></script>
+<script type="text/javascript" src="{{base_url}}js/jquery.textfill.min.js"></script>
+<script type="text/javascript" src="{{base_url}}js/jquery.arctext.js"></script>
 
-<a class="fancybox" style="display:none;" id="image_fancybox" rel="group" href="">
-<img src="" alt="" />
-</a>
+<div class="fancybox"  id="img_preview_fancybox" rel="group" style="display:none;">
+    <div style="position: relative;" >
+        <img src="{{image}}" alt="" style="width:100%;" />
+        <div class="" id="img_preview_text_container" style="width:{{w}}px; height:{{h}}px; position: absolute; top:{{x}}px; left:{{y}}px">
+            <div id="img_preview_text" style="color: {{color}};">hello world</div>        
+        </div>
+    </div>
+</div>
 
 <script type="text/javascript">
     $(document).ready(function() {
+
+        function shrink()
+        {
+            var fontsize = $("#img_preview_text").css('font-size');
+            fontsize = parseInt(fontsize.replace("px", ""));
+
+            while($("#img_preview_text").width() < $("#img_preview_text_container").width()){
+                fontsize = fontsize + 1;
+                $("#img_preview_text").css('font-size', fontsize + 'px');
+            }
+
+            btop= $("#img_preview_text_container").position().top;
+            bheight = $("#img_preview_text_container").height();
+
+            texttop =  $("#img_preview_text").position().top;
+            textheight = $("#img_preview_text").height();
+            delta = (bheight - textheight)/2 ;
+            $("#img_preview_text").css('top', delta + 'px');
+        }
+
         $("#preview_btn").click(function(event) {
-            url = '{{base_url}}/generate_image.php?';
-            url += 'text='+ $("#user_input").val();
-            url += '&font='+ $("#font_select option:selected").val();
+            url = '{{base_url}}generate_image_new.php?';
+            url += 'font='+ $("#font_select option:selected").val();
             url += '&id='+ $("#template_id").val();
+
+              var selected_font = $("#font_select option:selected").val();
         
             $.ajax({
                 url: url,
@@ -29,36 +59,42 @@
                 type: 'GET',
                 success: function (jsonp) {
                     data = jsonp.img;
-                    $("#image_fancybox").attr('href', data.trim());
-                    $("#img_name").val(jsonp.img_name);
-                    $("#image_fancybox img").attr('src', data.trim());
-                    $("#image_fancybox img").click();
+                    $("#img_preview_text").css('color', jsonp.color);
+                    $("#img_preview_text_container").css('top', jsonp.top);
+                    $("#img_preview_text_container").css('left', jsonp.left);
+                    $("#img_preview_text_container").css('width', jsonp.width);
+                    $("#img_preview_text_container").css('height', jsonp.height);
+
+                    $("#img_preview_fancybox").click();
+                    $("#img_preview_text").remove();
+                     textforshow  = $("#user_input").val().substring(0, jsonp.length);
+                    $('#img_preview_text_container').append('<span id="img_preview_text" style="color:'+jsonp.color+'; position: absolute; top:0px;">'+textforshow+'</span>');
+
+                    $('#img_preview_text_container').textfill({ 
+                                                widthOnly: true, 
+                                                maxFontPixels:0
+                                                // changeLineHeight: true, 
+                                                // minFontPixels: 1
+                                            });
+                     shrink();
+                    $('#img_preview_text').arctext({radius: parseInt(jsonp.radius), dir: parseInt(jsonp.dir)});
+                    $('#img_preview_text').css('font-family', selected_font);
+                    
                 }
             });
+
         });
-        $(".fancybox").fancybox({
-		  	afterClose: function() {			  
-			  	url = '{{base_url}}/delete_image.php?';
-	            url += 'name='+ $("#img_name").val();
-	            $.ajax({
-	                url: url,
-	                dataType: 'jsonp',
-	                jsonpCallback: 'callback',
-	                type: 'GET',
-	                success: function (jsonp) {
-	                }
-	            });
-		  	}
-		});
+        $("#img_preview_fancybox").fancybox({});
     });
 </script>
 
 <div class="impact_image_section">
-	<input name='text' value="" id="user_input">
-	<input type='hidden' name='id' value="{{datetimeid}}" id="template_id">
-  	<input type='hidden' value="" id="img_name">
-	<select id="font_select" name="font">
-		{{font_option}}
-	</select>
-	<button id="preview_btn">preview</button>
+    <input name='text' value="" id="user_input">
+    <input type='hidden' name='id' value="{{datetimeid}}" id="template_id">
+    <input type='hidden' value="" id="img_name">
+    <select id="font_select" name="font">
+        {{font_option}}
+    </select>
+
+    <button id="preview_btn">preview</button>
 </div>

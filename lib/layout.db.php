@@ -17,6 +17,9 @@ class Layout {
     public $h;
     public $id;
     public $l;
+    public $color;
+    public $d;
+    public $r;
     
 	
 	public function __construct() {
@@ -31,7 +34,10 @@ class Layout {
 	  	$this->w = $config['w'];
 	  	$this->h = $config['h'];
         $this->id = $config['id'];
-	  	$this->l = $config['l'];
+        $this->l = $config['l'];
+        $this->color = '#FFFFFF';
+	  	$this->d = 1;
+        $this->r = 0;
 	}
 
 	public function set_name($name) {
@@ -41,6 +47,21 @@ class Layout {
 
     public function set_l($l) {
         $this->l = $l;
+        return $this;
+    }
+
+    public function set_color($color) {
+        $this->color = $color;
+        return $this;
+    }
+
+    public function set_d($d) {
+        $this->d = $d;
+        return $this;
+    }
+
+    public function set_r($r) {
+        $this->r = $r;
         return $this;
     }
 
@@ -94,7 +115,10 @@ class Layout {
     	return array(
 	    		'name'=>$this->name,
 	    		'background_image'=>$this->background_image,
-	    		'datetime'=>$this->datetime,
+                'datetime'=>$this->datetime,
+                'color'=>$this->color,
+                'r'=>$this->r,
+	    		'd'=>$this->d,
 	    		'x1'=>$this->x1,
 	    		'x2'=>$this->x2,
 	    		'y1'=>$this->y1,

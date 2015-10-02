@@ -7,16 +7,14 @@ $config= [];
 $config['image_path'] = dirname(__FILE__).DIRECTORY_SEPARATOR.'img'.DIRECTORY_SEPARATOR;
 $config['image_review_path'] = dirname(__FILE__).DIRECTORY_SEPARATOR.'img_preview'.DIRECTORY_SEPARATOR;
 
-
 $root=(isset($_SERVER['HTTPS']) ? "https://" : "http://").$_SERVER['HTTP_HOST'];
 $root.= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
 
 $isexit = strpos($root, 'local');
 if($isexit != false){
-	$config['base_url'] = 'http://test.local/Site.ProductPreview/';
+	$config['base_path'] = 'C:/xampp/htdocs/www/test/previewimage/add-text-to-image/';
 }else{
-	// $config['base_url'] = 'http://103.9.77.27/demo/abc/';
-	$config['base_url'] = 'http://103.9.77.27/demo/abc/';
+	$config['base_path'] = 'var/www/demo/';
 }
 
 //default layout
