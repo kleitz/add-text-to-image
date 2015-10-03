@@ -6,7 +6,6 @@ function startUpload(){
 	$('#select_picture').html('Processing...');
 }
 
-
 function stopUpload(success){
 	if(success!=0 && success!="0"){
 		$('#select_picture').html('Please select your product picture');		
@@ -41,16 +40,7 @@ function stopUpload(success){
 	}
 }
 
-// function showCoords(c)
-// {	
-// 	console.log(c);
-// 	$("#coordx1").val(c.x);
-//     $("#coordy1").val(c.y);
-// 	$("#coordx2").val(c.x2);
-//     $("#coordy2").val(c.y2);
-// 	$("#coordw").val(c.w);
-//     $("#coordh").val(c.h);
-// };
+
 jQuery(document).ready(function($) {
 	$('#color').colorpicker();
 	$('#edit_color').colorpicker();

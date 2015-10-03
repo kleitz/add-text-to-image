@@ -13,6 +13,7 @@
 <script type="text/javascript" src="{{base_url}}/js/fancybox/jquery.fancybox-media.js"></script>
 <script type="text/javascript" src="{{base_url}}js/jquery.textfill.min.js"></script>
 <script type="text/javascript" src="{{base_url}}js/jquery.arctext.js"></script>
+<script type="text/javascript" src="{{base_url}}js/previewimage.js"></script>
 
 <div class="fancybox"  id="img_preview_fancybox" rel="group" style="display:none;">
     <div style="position: relative;" >
@@ -25,26 +26,6 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-
-        function shrink()
-        {
-            var fontsize = $("#img_preview_text").css('font-size');
-            fontsize = parseInt(fontsize.replace("px", ""));
-
-            while($("#img_preview_text").width() < $("#img_preview_text_container").width()){
-                fontsize = fontsize + 1;
-                $("#img_preview_text").css('font-size', fontsize + 'px');
-            }
-
-            btop= $("#img_preview_text_container").position().top;
-            bheight = $("#img_preview_text_container").height();
-
-            texttop =  $("#img_preview_text").position().top;
-            textheight = $("#img_preview_text").height();
-            delta = (bheight - textheight)/2 ;
-            $("#img_preview_text").css('top', delta + 'px');
-        }
-
         $("#preview_btn").click(function(event) {
             url = '{{base_url}}generate_image_new.php?';
             url += 'font='+ $("#font_select option:selected").val();
@@ -58,7 +39,7 @@
                 jsonpCallback: 'callback',
                 type: 'GET',
                 success: function (jsonp) {
-                    data = jsonp.img;
+                    $("#image_preview_image").attr('src', jsonp.img);
                     $("#img_preview_text").css('color', jsonp.color);
                     $("#img_preview_text_container").css('top', jsonp.top);
                     $("#img_preview_text_container").css('left', jsonp.left);
@@ -68,23 +49,26 @@
                     $("#img_preview_fancybox").click();
                     $("#img_preview_text").remove();
                      textforshow  = $("#user_input").val().substring(0, jsonp.length);
-                    $('#img_preview_text_container').append('<span id="img_preview_text" style="color:'+jsonp.color+'; position: absolute; top:0px;">'+textforshow+'</span>');
+                    $('#img_preview_text_container').html('<span id="img_preview_text" style="color:'+jsonp.color+'; position: absolute; top:0px;">'+textforshow+'</span>');
 
                     $('#img_preview_text_container').textfill({ 
                                                 widthOnly: true, 
                                                 maxFontPixels:0
-                                                // changeLineHeight: true, 
-                                                // minFontPixels: 1
                                             });
-                     shrink();
+                    
                     $('#img_preview_text').arctext({radius: parseInt(jsonp.radius), dir: parseInt(jsonp.dir)});
                     $('#img_preview_text').css('font-family', selected_font);
+                    shrink();
                     
                 }
             });
 
         });
-        $("#img_preview_fancybox").fancybox({});
+         $("#img_preview_fancybox").fancybox({
+            'beforeClose': function() {
+                $("#img_preview_text_container").attr('style', 'position: absolute;');
+            }
+        });
     });
 </script>
 
