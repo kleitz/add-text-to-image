@@ -27,6 +27,10 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $("#preview_btn").click(function(event) {
+            if($("#user_input").val() == ""){
+               return false;
+            }
+            
             url = '{{base_url}}generate_image_new.php?';
             url += 'font='+ $("#font_select option:selected").val();
             url += '&id='+ $("#template_id").val();
