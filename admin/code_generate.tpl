@@ -31,8 +31,8 @@
             url += 'font='+ $("#font_select option:selected").val();
             url += '&id='+ $("#template_id").val();
 
-              var selected_font = $("#font_select option:selected").val();
-        
+            var selected_font = $("#font_select option:selected").val();
+            
             $.ajax({
                 url: url,
                 dataType: 'jsonp',
@@ -60,6 +60,7 @@
                     $('#img_preview_text').css('font-family', selected_font);
                     
                     $('#img_preview_text').hide();
+                    autoResize();
                     shrink();
                     setTimeout(function(){
                       shrink();

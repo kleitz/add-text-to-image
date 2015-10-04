@@ -1,3 +1,24 @@
+function autoResize(){
+    var image = document.getElementById('preview_image_img');
+    var width = image.naturalWidth;
+    var height = image.naturalHeight;
+    var cwidth = $("#preview_image_img").width();
+    var cheight = $("#preview_image_img").height();
+
+    getRatiowidth = cwidth/width;
+    getRatioheight = cheight/height;
+    newboxwidth = getRatiowidth*$("#img_preview_text_container").width();
+    newboxheight = getRatioheight*$("#img_preview_text_container").height();
+    newboxtop = getRatioheight*$("#img_preview_text_container").position().top;
+    newboxleft = getRatiowidth*$("#img_preview_text_container").position().left;
+
+    $("#img_preview_text_container").css('top', newboxtop + 'px');
+    $("#img_preview_text_container").css('left', newboxleft + 'px');
+
+    $("#img_preview_text_container").width(newboxwidth);
+    $("#img_preview_text_container").height(newboxheight);
+}
+
 function shrink()
 {
     while(parseInt($("#img_preview_text").width()) < parseInt($("#img_preview_text_container").width())){
