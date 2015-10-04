@@ -17,9 +17,9 @@
 
 <div class="fancybox"  id="img_preview_fancybox" rel="group" style="display:none;">
     <div style="position: relative;" >
-        <img src="{{image}}" alt="" style="width:100%;" />
+        <img src="{{image}}" alt="" style="width:100%;" id="preview_image_img"/>
         <div class="" id="img_preview_text_container" style="width:{{w}}px; height:{{h}}px; position: absolute; top:{{x}}px; left:{{y}}px">
-            <div id="img_preview_text" style="color: {{color}};">hello world</div>        
+            <div id="img_preview_text" style="color: {{color}};"></div>        
         </div>
     </div>
 </div>
@@ -58,17 +58,28 @@
                     
                     $('#img_preview_text').arctext({radius: parseInt(jsonp.radius), dir: parseInt(jsonp.dir)});
                     $('#img_preview_text').css('font-family', selected_font);
-                    shrink();
                     
+                    $('#img_preview_text').hide();
+                    shrink();
+                    setTimeout(function(){
+                      shrink();
+                      $('#img_preview_text').show();
+                    }, 300);                    
                 }
             });
 
         });
+
          $("#img_preview_fancybox").fancybox({
-            'beforeClose': function() {
-                $("#img_preview_text_container").attr('style', 'position: absolute;');
-            }
-        });
+              closeBtn    : true,
+              closeClick  : false, // prevents closing when clicking the background 
+              openEffect  : 'elastic',
+              closeEffect : 'elastic',
+              scrolling   : 'no',
+              autoSize    : true,
+              fitToView   : true,
+              overlayShow: false
+          });  
     });
 </script>
 
