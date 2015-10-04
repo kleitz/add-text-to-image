@@ -20,8 +20,7 @@ class Layout {
     public $color;
     public $d;
     public $r;
-    
-	
+    	
 	public function __construct() {
 		global $config;
 	    $this->name = $config['name'];	

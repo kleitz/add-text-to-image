@@ -3,9 +3,8 @@
 // error_reporting(E_ALL);
 ini_set('display_errors', 0);
 
-$config= [];
+$config= array();
 $config['image_path'] = dirname(__FILE__).DIRECTORY_SEPARATOR.'img'.DIRECTORY_SEPARATOR;
-$config['image_review_path'] = dirname(__FILE__).DIRECTORY_SEPARATOR.'img_preview'.DIRECTORY_SEPARATOR;
 
 $root=(isset($_SERVER['HTTPS']) ? "https://" : "http://").$_SERVER['HTTP_HOST'];
 $root.= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
@@ -15,11 +14,12 @@ if($isexit != false){
 	$config['base_path'] = "C:/xampp/htdocs/www/test/previewimage/add-text-to-image/";
 	$config['base_url'] = 'http://test.local/previewimage/add-text-to-image/';
 }else{
-	$config['base_path'] = '/var/www/html/demo/hahaha1/';
-	$config['base_url'] = 'http://103.9.77.27/demo/hahaha1/';
+	//HINT: config here when deploy to server.
+	$config['base_path'] = '/var/www/html/demo/generateimage/';
+	$config['base_url'] = 'http://103.9.77.27/demo/generateimage/';
 }
 
-//default layout
+//init default values 
 $config['name'] = 'default';
 $config['background_image']= 'CH-Profile.jpg';
 $config['datetime']= time();
@@ -32,29 +32,18 @@ $config['h']= 43;
 $config['id']= 1;
 $config['l']= 100;//characters length
 
-// <option value="Angil">Angil</option>
-// <option value="Old English">Old English</option>
-// <option value="Impact">Impact</option>
-// <option value="Stencil">Stencil</option>
-// <option value="Kiss Me">Kiss Me</option>
-// <option value="Oklahoma">Oklahoma</option>
-// <option value="Boston">Boston</option>
-// <option value="Razor">Razor</option>
-// <option value="Sanchez">Sanchez</option>
-// <option value="Script">Script</option>
-
 $config['list_font'] = array(
-					'Angil'				=> 'angillatattoopersonaluseonly.ttf',
-					'Impact'			=> 'impact.ttf',
-					'Edwardian'			=> 'edwardian.ttf',
-					'Fetteunzfraktur'	=> 'fetteunzfraktur.ttf',
-					'H74rbl'			=> 'h74rbl.ttf',
-					'Kiss Me'			=> 'kgkissmeslowly.ttf',
-					'Boston'			=> 'lhfbostontruckstylec.ttf',
-					'Lintsec'			=> 'lintsec.ttf',
-					'Oklahoma'			=> 'oklahoma.ttf',
-					'Old English'		=> 'oldeenglish.ttf',
-					'Sanchez'			=> 'sanchezregular.ttf'
-				);?>
+							'Angil'				=> 'angillatattoopersonaluseonly.ttf',
+							'Impact'			=> 'impact.ttf',
+							'Edwardian'			=> 'edwardian.ttf',
+							'Fetteunzfraktur'	=> 'fetteunzfraktur.ttf',
+							'H74rbl'			=> 'h74rbl.ttf',
+							'Kiss Me'			=> 'kgkissmeslowly.ttf',
+							'Boston'			=> 'lhfbostontruckstylec.ttf',
+							'Lintsec'			=> 'lintsec.ttf',
+							'Oklahoma'			=> 'oklahoma.ttf',
+							'Old English'		=> 'oldeenglish.ttf',
+							'Sanchez'			=> 'sanchezregular.ttf'
+						);?>
 
 

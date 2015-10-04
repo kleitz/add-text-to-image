@@ -1,0 +1,132 @@
+<?php
+    require_once('config.php');
+
+    define('FONT_FOLDER',$config['base_path'].'fonts/');
+
+    // $MIMES=array(
+    //     '.eot'=>'application/vnd.ms-fontobject',
+    //     '.ttf'=>'font/ttf',
+    //     '.otf'=>'font/otf',
+    //     '.woff'=>'font/x-woff',
+    //     '.svg'=>'image/svg+xml',
+    // );
+
+    // $IKnowMime=MimeByExtension(GetExt($s));
+    // $f=preg_replace('/[^a-zA-Z.0-9-_]/','',$_REQUEST['f']);
+    $f=strip_tags($_REQUEST['f']);
+
+    
+    // header('Content-type: '.$IKnowMime );
+    // header("Accept-Ranges:bytes");
+    // // header('Content-type: application/x-font-ttf');
+    // header("Content-Transfer-Encoding: binary");
+    // header('Content-Length: '.filesize(FONT_FOLDER.$f));
+    // header('Content-Disposition: attachment; filename="'.$f.'";');
+
+    // header('Access-Control-Allow-Origin: *');
+
+    $filename = FONT_FOLDER.$f;
+    // echo $filename; exit;
+    
+    // downloadFile($filename);
+    downloadFileNew($filename, $f);
+    return;
+  
+    //Download function.
+
+function downloadFileNew($url) {
+    ob_start();
+    // header("Cache-Control: public");
+    // header("Content-Description: File Transfer");
+header("Content-Type: font/truetype");  
+    header("Content-Transfer-Encoding: binary");
+    
+    header('Content-Disposition: attachment; filename="' . basename($url).'"');
+
+    // header('Content-Length: ' . filesize($url));
+   
+    header('Access-Control-Allow-Origin: *');
+
+    $file = fopen ($url, "rb");
+    $sizedata = filesize($url);
+    
+    $data = fread($file, $sizedata);
+    fclose($file);
+
+    ob_end_clean();
+
+    // $newf = fopen ('tungtt.ttf', "wb");
+    // fwrite($newf, $data, $sizedata );
+    // fclose($newf);
+
+    // if ($file) {
+    //     $newf = fopen ($newfname, "wb");
+    //     if ($newf)
+    //         // while(!feof($file)) {
+    //         //   fwrite($newf, fread($file, 1024 * 8 ), 1024 * 8 );
+    //         // }
+    // }
+
+    // if ($file) {
+    
+    echo $data; exit;
+    // }
+    // fclose($newf);
+
+    // if ($newf) {
+    //     fclose($newf);
+    // }
+ }
+
+function downloadFile($file) {
+    clearstatcache();
+    header("Cache-Control: public");
+    header("Content-Description: File Transfer");
+    header('Content-Disposition: attachment; filename="' . basename($file).'"');
+    header('Content-Length: ' . filesize($file));
+    header("Content-Type: application/force-download");
+    header("Content-Transfer-Encoding: binary");
+    $f = fopen($file, 'rb');
+    if ($f === false) {
+        return false;
+    }
+
+    // $tries = 3;
+    // while ($tries > 0) {
+    //     $isLockSH = flock($f, LOCK_SH);
+    //     if (!$isLockSH) {
+    //         sleep(5);
+    //         $tries--;
+    //     } else {
+    //         $tries = 0;
+    //     }
+    // }
+    // if ($isLockSH) {
+        $buffer = fread($f, filesize($file));
+        echo $buffer;
+        ob_flush();
+        flush();
+       
+    // } else {
+    //     return;
+    // }
+    // flock($f, LOCK_UN);
+    fclose($f);
+   
+}
+
+
+    // function GetExt($File) {
+    //     $File=explode('.',$File);
+    //     if(count($File)==1) return '';
+    //     return '.'.$File[count($File)-1];
+    // }
+
+    // function MimeByExtension($ex) {
+    //     global $MIMES;
+    //     $ex=strtolower($ex);
+    //     if(isset($MIMES[$ex])) return $MIMES[$ex];
+    //     else return FALSE;
+    // }
+
+?>

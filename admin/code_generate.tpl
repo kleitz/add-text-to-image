@@ -71,16 +71,16 @@
 
         });
 
-         $("#img_preview_fancybox").fancybox({
-              closeBtn    : true,
-              closeClick  : false, // prevents closing when clicking the background 
-              openEffect  : 'elastic',
-              closeEffect : 'elastic',
-              scrolling   : 'no',
-              autoSize    : true,
-              fitToView   : true,
-              overlayShow: false
-          });  
+        $("#img_preview_fancybox").fancybox({
+            closeBtn    : true,
+            closeClick  : false, // prevents closing when clicking the background 
+            openEffect  : 'elastic',
+            closeEffect : 'elastic',
+            scrolling   : 'no',
+            autoSize    : true,
+            fitToView   : true,
+            overlayShow: false
+        });  
     });
 </script>
 
