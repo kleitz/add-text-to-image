@@ -6,11 +6,11 @@
 <link rel="stylesheet" href="{{base_url}}css/style.css" type="text/css" media="screen" />
 
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script type="text/javascript" src="{{base_url}}/js/fancybox/jquery.fancybox.js"></script>
-<script type="text/javascript" src="{{base_url}}/js/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
-<script type="text/javascript" src="{{base_url}}/js/fancybox/jquery.fancybox-buttons.js"></script>
-<script type="text/javascript" src="{{base_url}}/js/fancybox/jquery.fancybox-thumbs.js?v=1.0.7"></script>
-<script type="text/javascript" src="{{base_url}}/js/fancybox/jquery.fancybox-media.js"></script>
+<script type="text/javascript" src="{{base_url}}js/fancybox/jquery.fancybox.js"></script>
+<script type="text/javascript" src="{{base_url}}js/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+<script type="text/javascript" src="{{base_url}}js/fancybox/jquery.fancybox-buttons.js"></script>
+<script type="text/javascript" src="{{base_url}}js/fancybox/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+<script type="text/javascript" src="{{base_url}}js/fancybox/jquery.fancybox-media.js"></script>
 <script type="text/javascript" src="{{base_url}}js/jquery.textfill.min.js"></script>
 <script type="text/javascript" src="{{base_url}}js/jquery.arctext.js"></script>
 <script type="text/javascript" src="{{base_url}}js/previewimage.js"></script>
@@ -39,7 +39,7 @@
                 jsonpCallback: 'callback',
                 type: 'GET',
                 success: function (jsonp) {
-                    $("#image_preview_image").attr('src', jsonp.img);
+                    // $("#image_preview_image").attr('src', jsonp.img);
                     $("#img_preview_text").css('color', jsonp.color);
                     $("#img_preview_text_container").css('top', jsonp.top);
                     $("#img_preview_text_container").css('left', jsonp.left);

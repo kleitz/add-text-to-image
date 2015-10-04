@@ -15,8 +15,8 @@ if($isexit != false){
 	$config['base_path'] = "C:/xampp/htdocs/www/test/previewimage/add-text-to-image/";
 	$config['base_url'] = 'http://test.local/previewimage/add-text-to-image/';
 }else{
-	$config['base_path'] = '/var/www/html/demo/generateimage/';
-	$config['base_url'] = 'http://103.9.77.27/demo/generateimage/';
+	$config['base_path'] = '/var/www/html/demo/hahaha1/';
+	$config['base_url'] = 'http://103.9.77.27/demo/hahaha1/';
 }
 
 //default layout

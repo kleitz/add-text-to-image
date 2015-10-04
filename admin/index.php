@@ -8,6 +8,9 @@ require_once('../lib/layout.db.php');
 // ini_set('display_errors', 1);
 
 $dbHandler = new JsonDB("database.json");
+$databasefilename = dirname($_SERVER["SCRIPT_FILENAME"]) . "/database.json" ;
+chmod($databasefilename, 0777);
+
 $currentlayoutObj = new Layout();
 
 //check request
@@ -32,18 +35,23 @@ if(is_ajax() || isset($_POST['type'])){
 			$new_layout->set_d($_POST['d']);
 			
 			$currentListLayout = $dbHandler->read('layout');	
-			
-			if(is_array($currentListLayout)){
-				$tmparr = $currentListLayout;
-			} else {
-				$tmparr = get_object_vars($currentListLayout);
+			if($currentListLayout!=null){
+				if(is_array($currentListLayout)){
+					$tmparr = $currentListLayout;
+				} else {
+					$tmparr = get_object_vars($currentListLayout);
+				}	
+				array_push($tmparr, (object) $new_layout->getAllData()); 
+			}else{
+				$tmparr= array((object) $new_layout->getAllData());
 			}
+			
 
 			// $tmparr[]= (object) $new_layout->getAllData();
-			array_push($tmparr, (object) $new_layout->getAllData()); 
+			
 			$currentListLayout = $tmparr;
-
 			$rs = $dbHandler->set("layout", $currentListLayout)->save();
+		
 
 			if($rs){
 				$tmpdata = ($new_layout->getAllData());
